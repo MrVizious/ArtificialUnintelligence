@@ -5,143 +5,84 @@ using System;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(StickmanMovement))]
 
-public class StickmanControllerAutomatic : MonoBehaviour
-{
-    private Rigidbody2D rb;
-    public float speed;
-    public float max_x_Speed;
-    public float max_y_Speed;
-    public float jumpForce;
-    private List<Action> actions;
-
-    [SerializeField]
-    private bool grounded;
+public class StickmanControllerAutomatic : MonoBehaviour {
 
 
 
+	private StickmanMovement movement;
+	private List<Action> actions;
+	private bool started;
+	private float executionTime;
 
 
+	/**********************************************************
+	 *                    AUTOMATION                          *
+	 **********************************************************/
 
-    void FixedUpdate(){
-        //Sets the horizontal speed to that given by the axis input previously recorded and clamps both axis of velocity according to maximum speeds allowed
-        rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + currentAxis * speed * Time.deltaTime, -max_x_Speed, max_x_Speed), Mathf.Clamp(rb.velocity.y, -max_y_Speed, max_y_Speed));
-    }
+	public string fileName;
 
-    void OnCollisionStay2D(Collision2D collisionInfo)
-    {
-        //Ground check
-        if(collisionInfo.gameObject.tag.Equals("Ground") && collisionInfo.otherCollider.gameObject.tag.Equals("StickMan")) grounded = true;
-        //Debug.Log("Collider de objeto: " + collisionInfo.otherCollider.gameObject.tag + " contra collider de tag: " + collisionInfo.gameObject.tag);
-    }
+	void Start() {
+		movement = GetComponent<StickmanMovement>();
+		actions = new List<Action>();
+		started = false;
+		ReadActionsLog();
+	}
 
-    void OnCollisionEnter2D(Collision2D collisionInfo)
-    {
-        //Ground check
-        if(collisionInfo.gameObject.tag.Equals("Ground") && collisionInfo.otherCollider.gameObject.tag.Equals("StickMan")) grounded = true;
-        //Debug.Log("Collider de objeto: " + collisionInfo.otherCollider.gameObject.tag + " contra collider de tag: " + collisionInfo.gameObject.tag);
-    }
+	public void StartMoving() {
+		if (debugMovementStarted) Debug.Log("Automatic movement started!");
+		if (actions.Count <= 0) ReadActionsLog();
+		started = true;
+		executionTime = 0f;
+	}
 
-    void OnCollisionExit2D(Collision2D collisionInfo){
-        //Ground check
-        if(collisionInfo.gameObject.tag.Equals("Ground") && collisionInfo.otherCollider.gameObject.tag.Equals("StickMan")) grounded = false;
-    }
+	private void ReadActionsLog() {
+		string path = Application.dataPath + "/Routines/" + fileName + ".txt";
+		if (debugPath) Debug.Log("Path chosen is: " + path);
+		using (StreamReader sr = File.OpenText(path)) {
+			if (debugFileOpened) Debug.Log("First line read is: " + sr.ReadLine());
+			string s;
+			while ((s = sr.ReadLine()) != null) {
+				string[] splitted = s.Split(' ');
+				if (splitted.Length == 3) {
+					actions.Add(new Action(splitted[0], float.Parse(splitted[1]), float.Parse(splitted[2])));
+				} else {
+					actions.Add(new Action(splitted[0], float.Parse(splitted[1])));
+				}
+			}
+		}
+	}
 
-
-
-
-    /**********************************************************
-     *                    AUTOMATION                          *
-     **********************************************************/
-
-    public string fileName;
-    private float currentAxis;
-
-    void Start(){
-        rb = GetComponent<Rigidbody2D>();
-        grounded = false;
-        currentAxis = 0f;
-        actions = new List<Action>();
-        ReadActionsLog();
-    }
-
-    private void ReadActionsLog(){
-        string path = Application.dataPath + "/Routines/" + fileName + ".txt";
-        if(debugPath) Debug.Log("Path chosen is: " + path);
-        using (StreamReader sr = File.OpenText(path))
-        {
-            if(debugFileOpened) Debug.Log("First line read is: " + sr.ReadLine());
-            string s;
-            while ((s = sr.ReadLine()) != null)
-            {
-                string[] splitted = s.Split(' ');
-                if(splitted.Length == 3){
-                    actions.Add(new Action(splitted[0], float.Parse(splitted[1]), float.Parse(splitted[2])));
-                } else {
-                    actions.Add(new Action(splitted[0], float.Parse(splitted[1])));
-                }
-            }
-        }
-    }
-
-    //Custom class to keep action data
-    private class Action{
-        public string name;
-        public float executionTime;
-        public float numericData;
-
-        public Action(string newName, float newExecutionTime, float newNumericData){
-            name = newName;
-            executionTime = newExecutionTime;
-            numericData = newNumericData;
-        }
-
-        public Action(string newName, float newExecutionTime){
-            name = newName;
-            executionTime = newExecutionTime;
-        }
-
-        public string toString(){
-            string returnString = "";
-            returnString += name;
-            returnString += " ";
-            returnString += executionTime;
-            if(name.Equals("Run")){
-                returnString += " ";
-                returnString += numericData;
-            }
-            return returnString;
-        }
-    }
-
-    //Checks if the input for jump is pressed, and makes the character jump
-    private void Jump(){
-        if(grounded){
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-            rb.AddForce(new Vector2(0, jumpForce));
-        }
-    }
-
-    void Update(){
-        if(actions.Count > 0 && Time.time >= actions[0].executionTime){
-            switch(actions[0].name){
-                case "Jump": Jump();
-                             break;
-                case "Run":  currentAxis = actions[0].numericData;
-                             break;
-                default:     break;
-            }
-            actions.RemoveAt(0);
-        }
-    }
+	void FixedUpdate() {
+		if (started) {
+			if (debugExecutionTime) Debug.Log("Current execution time since the movement started: " + executionTime);
+			if (actions.Count > 0) {
+				if (executionTime >= actions[0].executionTime) {
+					switch (actions[0].name) {
+						case "Jump":
+							movement.Jump();
+							break;
+						case "Run":
+							movement.setDirection((int) actions[0].numericData);
+							break;
+						default: break;
+					}
+					if (debugActionsPerformed) Debug.Log(actions[0].name + " action performed at time " + executionTime);
+					actions.RemoveAt(0);
+				}
+				executionTime += Time.fixedDeltaTime;
+			} else started = false;
+		} else if (Input.GetButtonDown("Fire1")) StartMoving();
+	}
 
 
-
-
-    /**********************************************************
-     *                    DEBUGGING                           *
-     **********************************************************/
-     public bool debugPath;
-     public bool debugFileOpened;
+	/**********************************************************
+	 *                    DEBUGGING                           *
+	 **********************************************************/
+	public bool debugPath;
+	public bool debugFileOpened;
+	public bool debugMovementStarted;
+	public bool debugExecutionTime;
+	public bool debugActionsPerformed;
 }

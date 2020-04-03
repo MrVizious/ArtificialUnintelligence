@@ -24,5 +24,5 @@
 - [ ] Less number of inputs mode.
 
 ## Implementations
-- [ ] Controller input system.
+- [ ] ~~Controller input system.~~
 - [ ] 2D player movement.

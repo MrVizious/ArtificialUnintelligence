@@ -15,35 +15,6 @@ public class InputRecorder : MonoBehaviour {
 	//This allows to create a named file instead of a non-specific name
 	public string fileName;
 
-	//Custom class to keep action data
-	private class Action {
-		public string name;
-		public float executionTime;
-		public float numericData;
-
-		public Action(string newName, float newExecutionTime, float newNumericData) {
-			name = newName;
-			executionTime = newExecutionTime;
-			numericData = newNumericData;
-		}
-
-		public Action(string newName, float newExecutionTime) {
-			name = newName;
-			executionTime = newExecutionTime;
-		}
-
-		public string toString() {
-			string returnString = "";
-			returnString += name;
-			returnString += " ";
-			returnString += executionTime;
-			if (name.Equals("Run")) {
-				returnString += " ";
-				returnString += numericData;
-			}
-			return returnString;
-		}
-	}
 
 	void Start() {
 		//Empty List of actions and times
