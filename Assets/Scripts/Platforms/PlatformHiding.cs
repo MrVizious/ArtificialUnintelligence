@@ -42,7 +42,7 @@ public class PlatformHiding : Platform {
 	public bool testActivation;
 
 	private void Update() {
-		if (testActivation && Input.GetKeyDown(KeyCode.C)) {
+		if (testActivation && Input.GetKeyDown(KeyCode.H)) {
 			ToggleActivate();
 			Debug.Log("Alpha of sprite color: " + sprite.color.a);
 		}

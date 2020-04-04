@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
 
-public class PlatformStartStopPath : Platform {
+public class PlatformKeepPressingPath : Platform {
 
 	[SerializeField] private PathCreator pathCreator;
 	[SerializeField] private float speed;
-	[SerializeField] private bool moving;
+	[SerializeField] private bool activated;
 	private float distanceTravelled;
 
 	new void Start() {
@@ -20,6 +20,22 @@ public class PlatformStartStopPath : Platform {
 		transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, EndOfPathInstruction.Reverse);
 	}
 
+	public void Activate() {
+		activated = true;
+
+	}
+	public void Deactivate() {
+		activated = false;
+	}
+	public void ToggleActivate() {
+		setActivated(!activated);
+	}
+
+	public void setActivated(bool newValue) {
+		if (newValue) Activate();
+		else Deactivate();
+	}
+
 	/**********************************************************
      *                    DEBUGGING                           *
 	 **********************************************************/
@@ -27,12 +43,15 @@ public class PlatformStartStopPath : Platform {
 	public bool testActivation;
 
 	private void Update() {
-		if (testActivation && Input.GetKeyDown(KeyCode.T)) {
-			moving = !moving;
+		if (testActivation) {
+			if (Input.GetKeyDown(KeyCode.O)) {
+				ToggleActivate();
+			}
+			if (Input.GetKeyUp(KeyCode.O)) {
+				ToggleActivate();
+			}
 		}
-		if (moving) {
-			Move();
-		}
+		if (activated) Move();
 	}
 
 
