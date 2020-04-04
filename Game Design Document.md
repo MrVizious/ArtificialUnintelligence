@@ -22,6 +22,7 @@
 - [ ] Drag and drop platforms.
 - [ ] Guitar hero-like bar that shows you the movement to come.
 - [ ] Less number of inputs mode.
+- [ ] Trying to activate a platform while the character is on it makes it to not activate, but if several platforms are activated with the same button, this can be used as a mechanic.
 
 ## Implementations
 - [ ] ~~Controller input system.~~

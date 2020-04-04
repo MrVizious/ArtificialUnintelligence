@@ -5,32 +5,23 @@ using UnityEngine;
 public class PlatformKeepPressing : Platform {
 
 	[SerializeField] private bool activated;
-	private Collider2D collider;
-	private SpriteRenderer sprite;
 
 	// Start is called before the first frame update
-	void Start() {
-		collider = GetComponent<Collider2D>();
-		sprite = GetComponent<SpriteRenderer>();
+	new void Start() {
+		base.Start();
 		setActivated(activated);
 	}
 
 	public void Activate() {
-		activated = true;
-		collider.enabled = activated;
-		if (debugGraphic) {
-			Color tmp = sprite.color;
-			tmp.a = 1f;
-			sprite.color = tmp;
+		if (setEnabledCollider(true)) {
+			activated = true;
+			if (debugGraphic) ChangeSpriteOpacity(1f);
 		}
 	}
 	public void Deactivate() {
-		activated = false;
-		collider.enabled = activated;
-		if (debugGraphic) {
-			Color tmp = sprite.color;
-			tmp.a = 0.2f;
-			sprite.color = tmp;
+		if (setEnabledCollider(false)) {
+			activated = false;
+			if (debugGraphic) ChangeSpriteOpacity(0.2f);
 		}
 	}
 	public void ToggleActivate() {
