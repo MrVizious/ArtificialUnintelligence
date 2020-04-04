@@ -42,21 +42,21 @@ public class Platform : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D other) {
 		if (other.gameObject.tag.Equals("Player")) inContactWithPlayer = true;
-		if (debugCollision) Debug.Log("TriggerEnter", this);
+		if (logCollision) Debug.Log("TriggerEnter", this);
 	}
 	private void OnTriggerStay2D(Collider2D other) {
 		if (other.gameObject.tag.Equals("Player")) inContactWithPlayer = true;
-		if (debugCollision) Debug.Log("TriggerStay", this);
+		if (logCollision) Debug.Log("TriggerStay", this);
 	}
 	private void OnTriggerExit2D(Collider2D other) {
 		if (other.gameObject.tag.Equals("Player")) inContactWithPlayer = false;
-		if (debugCollision) Debug.Log("TriggerExit", this);
+		if (logCollision) Debug.Log("TriggerExit", this);
 	}
 
 	/**********************************************************
      *                    DEBUGGING                           *
 	 **********************************************************/
 
-	public bool debugCollision;
+	public bool logCollision;
 
 }

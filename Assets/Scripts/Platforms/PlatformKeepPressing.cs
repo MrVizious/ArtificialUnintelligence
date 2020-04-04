@@ -39,9 +39,10 @@ public class PlatformKeepPressing : Platform {
 
 	//Changes opacity of the sprites to see if they are activated or not
 	public bool debugGraphic;
+	public bool testActivation;
 
 	private void Update() {
-		if (debugGraphic) {
+		if (testActivation) {
 			if (Input.GetKeyDown(KeyCode.K)) {
 				ToggleActivate();
 				Debug.Log("Alpha of sprite color: " + sprite.color.a);

@@ -4,8 +4,9 @@
 - [x] Non-interactive obstacles.
 - [ ] Killing obstacles.
 - [x] Simple press to activate/deactivate. No need to keep pressed.
-- [ ] Keep pressed to activate.
+- [x] Keep pressed to activate.
 - [ ] Keep pressed to follow an established path.
+- [ ] Rotating platforms. Can be following a path or simply in place. Can be activated or deactivated with some other mechanisms.
 - [ ] Flappy bird-like platforms.
 - [ ] Press to start movement. Can't be stopped.
 - [ ] Press to stop movement. Can only be pressed for a short time.
