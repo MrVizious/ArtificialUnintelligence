@@ -1,9 +1,9 @@
 # Artificial Inability
 
 ## Platforms
-- [ ] Non-interactive obstacles.
+- [x] Non-interactive obstacles.
 - [ ] Killing obstacles.
-- [ ] Simple click to activate/deactivate. No need to keep pressed.
+- [x] Simple press to activate/deactivate. No need to keep pressed.
 - [ ] Keep pressed to activate.
 - [ ] Keep pressed to follow an established path.
 - [ ] Flappy bird-like platforms.
