@@ -25,34 +25,51 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 	 **********************************************************/
 
 	public void Activate() {
-		activationTarget.Activate();
+		if (currentRoutine == null) {
+			switch (mode) {
+				case Mode.FixedTimePressed:
+					currentRoutine = FixedTimeCoroutine();
+					StartCoroutine(currentRoutine);
+					break;
+				case Mode.MinTimePressed:
+					break;
+				case Mode.MaxTimePressed:
+					break;
+				default:
+					break;
+			}
+		}
 	}
-
 	public void Deactivate() {
-		activationTarget.Deactivate();
+		if (currentRoutine == null) {
+			switch (mode) {
+				case Mode.FixedTimePressed:
+					//Do nothing
+					break;
+				case Mode.MinTimePressed:
+					break;
+				case Mode.MaxTimePressed:
+					break;
+				default:
+					break;
+			}
+		}
 	}
 	public void ToggleActivated() {
-		StartCoroutine("ToggleActivatedCoroutine");
-	}
-	private IEnumerator ToggleActivatedCoroutine() {
-
-		switch (mode) {
-			case Mode.FixedTimePressed:
-				currentRoutine = FixedTimeCoroutine();
-				StartCoroutine(currentRoutine);
-				break;
-			case Mode.MinTimePressed:
-
-				break;
-			case Mode.MaxTimePressed:
-
-				break;
-			default:
-				break;
+		if (currentRoutine == null) {
+			switch (mode) {
+				case Mode.FixedTimePressed:
+					currentRoutine = FixedTimeCoroutine();
+					StartCoroutine(currentRoutine);
+					break;
+				case Mode.MinTimePressed:
+					break;
+				case Mode.MaxTimePressed:
+					break;
+				default:
+					break;
+			}
 		}
-		if (activationTarget.getActivated()) activationTarget.Deactivate();
-		else activationTarget.Activate();
-		yield return null;
 	}
 	public void setActivated(bool newValue) {
 		if (newValue) Activate();
@@ -65,8 +82,10 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 
 	private IEnumerator FixedTimeCoroutine() {
 		activationTarget.ToggleActivated();
+		if (debugDelay) Debug.Log("Toggling for " + elapsedTimeInSeconds + " seconds");
 		yield return new WaitForSeconds(elapsedTimeInSeconds);
 		activationTarget.ToggleActivated();
+		if (debugDelay) Debug.Log("Toggling back");
 		currentRoutine = null;
 	}
 
@@ -74,10 +93,14 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 		yield return null;
 	}
 
+	private IEnumerator MaxTime() {
+		yield return null;
+	}
+
 
 
 	/**********************************************************
-     *                    DEBUGGING                           *
+	 *                    DEBUGGING                           *
 	 **********************************************************/
 
 	public bool debugDelay;

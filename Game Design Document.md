@@ -32,3 +32,4 @@
 
 ## Possible ideas
 - [ ] Change input mode mid-game (from keep pressing to move, to press to Start/Stop)
+- [ ] Change activation methods mid-game.
