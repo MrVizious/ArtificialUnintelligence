@@ -9,13 +9,13 @@ public class PlatformHiding : Platform {
 	// Start is called before the first frame update
 	new void Start() {
 		base.Start();
-		setActivated(getActivated());
+		setActivated(activated);
 	}
 
 	public override void setActivated(bool newValue) {
 		if (setEnabledCollider(newValue)) {
 			base.setActivated(newValue);
-			if (debugGraphic) ChangeSpriteOpacity(newValue ? 1f : 0.2f);
+			if (debugGraphic) ChangeSpriteOpacity((activated) ? 1f : 0.2f);
 		}
 	}
 

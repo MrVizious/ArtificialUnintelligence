@@ -14,10 +14,14 @@ public class Activator : MonoBehaviour {
 
 
 
+
 	// Start is called before the first frame update
 	void Start() {
 		activationTarget = GetComponent<Delayer>();
+		if (activationTarget == null) activationTarget = GetComponent<TimeRestrictor>();
 		if (activationTarget == null) activationTarget = GetComponent<Platform>();
+		if (activationTarget == null) Debug.LogError("No platform found!");
+
 	}
 
 	// Update is called once per frame
@@ -32,10 +36,10 @@ public class Activator : MonoBehaviour {
 			case Mode.KeepPressed:
 				if (Input.GetKeyDown(key)) {
 					if (debugActivation) Debug.Log("Toggling activation of KeepPressed platform", this);
-					activationTarget.ToggleActivated();
+					activationTarget.Activate();
 				} else if (Input.GetKeyUp(key)) {
 					if (debugActivation) Debug.Log("Toggling activation of KeepPressed platform", this);
-					activationTarget.ToggleActivated();
+					activationTarget.Deactivate();
 				}
 				break;
 			case Mode.Burst:

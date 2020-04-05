@@ -8,5 +8,6 @@ public interface IsActivated {
 	void Deactivate();
 	void ToggleActivated();
 	void setActivated(bool newValue);
+	bool getActivated();
 
 }

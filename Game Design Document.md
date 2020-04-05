@@ -5,7 +5,7 @@
 - [ ] Killing obstacles.
 - [x] Simple press to activate/deactivate. No need to keep pressed.
 - [x] Keep pressed to activate.
-- [ ] Keep pressed to follow an established path.
+- [x] Keep pressed to follow an established path.
 - [ ] Rotating platforms. Can be following a path or simply in place. Can be activated or deactivated with some other mechanisms.
 - [ ] Flappy bird-like platforms.
 - [ ] Press to start movement. Can't be stopped.
@@ -27,4 +27,8 @@
 
 ## Implementations
 - [ ] ~~Controller input system.~~
-- [ ] 2D player movement.
+- [ ] 2D player movement -> Use rigidbody instead of velocity.
+
+
+## Possible ideas
+- [ ] Change input mode mid-game (from keep pressing to move, to press to Start/Stop)

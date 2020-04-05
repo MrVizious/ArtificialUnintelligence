@@ -11,11 +11,15 @@ public class Platform : MonoBehaviour, IsActivated {
 	[SerializeField] protected bool playerIsInside;
 
 
-	[SerializeField] protected bool activated;
+	[SerializeField] protected bool startActivated;
+	protected bool activated;
+
 	protected void Start() {
+		gameObject.tag = "Platform";
 		col = GetComponent<Collider2D>();
 		sprite = GetComponent<SpriteRenderer>();
 		playerIsInside = false;
+		activated = false;
 	}
 
 	protected void ChangeSpriteOpacity(float newValue) {
@@ -43,7 +47,7 @@ public class Platform : MonoBehaviour, IsActivated {
 		return setEnabledCollider(!col.isTrigger);
 	}
 	protected bool setEnabledCollider(bool newValue) {
-		if (newValue) return EnableCollider();
+		if (newValue != startActivated) return EnableCollider();
 		else return DisableCollider();
 	}
 
@@ -76,11 +80,11 @@ public class Platform : MonoBehaviour, IsActivated {
 		setActivated(false);
 	}
 	public virtual void ToggleActivated() {
-		setActivated(!activated);
+		setActivated(!activated != startActivated);
 	}
 
 	public virtual void setActivated(bool newValue) {
-		activated = newValue;
+		activated = (newValue != startActivated);
 		if (debugActivation) Debug.Log("Platform has been activated: " + newValue);
 	}
 
