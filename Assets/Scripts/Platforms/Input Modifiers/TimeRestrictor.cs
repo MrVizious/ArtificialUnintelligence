@@ -11,7 +11,7 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 	[SerializeField] private float elapsedTimeInSeconds;
 	private Platform activationTarget;
 	private bool keepToggled;
-	private IEnumerator currentRoutine;
+	[SerializeField] private IEnumerator currentRoutine;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -32,6 +32,8 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 					StartCoroutine(currentRoutine);
 					break;
 				case Mode.MinTimePressed:
+					currentRoutine = MinTimeCoroutine();
+					StartCoroutine(currentRoutine);
 					break;
 				case Mode.MaxTimePressed:
 					break;
@@ -47,6 +49,7 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 					//Do nothing
 					break;
 				case Mode.MinTimePressed:
+					activationTarget.Deactivate();
 					break;
 				case Mode.MaxTimePressed:
 					break;
@@ -63,6 +66,8 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 					StartCoroutine(currentRoutine);
 					break;
 				case Mode.MinTimePressed:
+					currentRoutine = MinTimeCoroutine();
+					StartCoroutine(currentRoutine);
 					break;
 				case Mode.MaxTimePressed:
 					break;
@@ -82,18 +87,22 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 
 	private IEnumerator FixedTimeCoroutine() {
 		activationTarget.ToggleActivated();
-		if (debugDelay) Debug.Log("Toggling for " + elapsedTimeInSeconds + " seconds");
+		if (debugTime) Debug.Log("Toggling for " + elapsedTimeInSeconds + " seconds");
 		yield return new WaitForSeconds(elapsedTimeInSeconds);
 		activationTarget.ToggleActivated();
-		if (debugDelay) Debug.Log("Toggling back");
+		if (debugTime) Debug.Log("Toggling back");
 		currentRoutine = null;
 	}
 
-	private IEnumerator MinTime() {
-		yield return null;
+	private IEnumerator MinTimeCoroutine() {
+		activationTarget.ToggleActivated();
+		if (debugTime) Debug.Log("Toggling for " + elapsedTimeInSeconds + " seconds");
+		yield return new WaitForSeconds(elapsedTimeInSeconds);
+		if (debugTime) Debug.Log("Toggling back");
+		currentRoutine = null;
 	}
 
-	private IEnumerator MaxTime() {
+	private IEnumerator MaxTimeCoroutine() {
 		yield return null;
 	}
 
@@ -103,6 +112,6 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 	 *                    DEBUGGING                           *
 	 **********************************************************/
 
-	public bool debugDelay;
+	public bool debugTime;
 
 }
