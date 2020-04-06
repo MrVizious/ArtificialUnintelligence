@@ -582,7 +582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerIsInside: 0
-  startActivated: 0
+  startActivated: 1
   logCollision: 0
   debugActivation: 0
   debugGraphic: 1
@@ -599,7 +599,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: 104
-  mode: 0
+  mode: 1
   debugActivation: 0
 --- !u!114 &931504314
 MonoBehaviour:
@@ -613,8 +613,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13201e55a47a9e14c9aa6f7bbc766aa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 2
-  elapsedTimeInSeconds: 1
+  mode: 1
+  elapsedTimeInSeconds: 2
   debugTime: 0
 --- !u!1 &1047788284
 GameObject:
@@ -650,7 +650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: 104
-  mode: 0
+  mode: 1
   debugActivation: 0
 --- !u!114 &1047788286
 MonoBehaviour:
@@ -771,9 +771,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13201e55a47a9e14c9aa6f7bbc766aa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 2
-  elapsedTimeInSeconds: 1
-  debugTime: 1
+  mode: 1
+  elapsedTimeInSeconds: 2
+  debugTime: 0
 --- !u!1 &1777644378
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +918,7 @@ MonoBehaviour:
   debugActivation: 0
   pathCreator: {fileID: 2050548344}
   speed: 1
-  initialPosition: 0.99
+  initialPosition: 0
 --- !u!114 &1777644384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -931,9 +931,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13201e55a47a9e14c9aa6f7bbc766aa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
+  mode: 1
   elapsedTimeInSeconds: 2
-  debugTime: 0
+  debugTime: 1
 --- !u!1 &2050548343
 GameObject:
   m_ObjectHideFlags: 0

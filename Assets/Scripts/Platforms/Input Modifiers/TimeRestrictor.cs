@@ -9,9 +9,9 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 	[SerializeField] private Mode mode;
 
 	[SerializeField] private float elapsedTimeInSeconds;
+	private IEnumerator currentRoutine;
 	private Platform activationTarget;
-	private bool keepToggled;
-	[SerializeField] private IEnumerator currentRoutine;
+	private bool keepActive;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -25,56 +25,79 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 	 **********************************************************/
 
 	public void Activate() {
-		if (currentRoutine == null) {
-			switch (mode) {
-				case Mode.FixedTimePressed:
+
+		switch (mode) {
+			case Mode.FixedTimePressed:
+				if (currentRoutine == null) {
 					currentRoutine = FixedTimeCoroutine();
 					StartCoroutine(currentRoutine);
-					break;
-				case Mode.MinTimePressed:
+				}
+				break;
+			case Mode.MinTimePressed:
+				if (currentRoutine == null) {
 					currentRoutine = MinTimeCoroutine();
 					StartCoroutine(currentRoutine);
-					break;
-				case Mode.MaxTimePressed:
-					break;
-				default:
-					break;
-			}
+				} else keepActive = true;
+				break;
+			case Mode.MaxTimePressed:
+				if (currentRoutine != null) StopCoroutine(currentRoutine);
+				currentRoutine = MaxTimeCoroutine();
+				StartCoroutine(currentRoutine);
+				break;
+			default:
+				break;
 		}
+
 	}
 	public void Deactivate() {
-		if (currentRoutine == null) {
-			switch (mode) {
-				case Mode.FixedTimePressed:
-					//Do nothing
-					break;
-				case Mode.MinTimePressed:
-					activationTarget.Deactivate();
-					break;
-				case Mode.MaxTimePressed:
-					break;
-				default:
-					break;
-			}
+
+		switch (mode) {
+			case Mode.FixedTimePressed:
+				if (currentRoutine == null) activationTarget.Deactivate();
+				break;
+			case Mode.MinTimePressed:
+				if (currentRoutine == null) activationTarget.Deactivate();
+				else keepActive = false;
+				break;
+			case Mode.MaxTimePressed:
+				if (currentRoutine != null) StopCoroutine(currentRoutine);
+				currentRoutine = null;
+				activationTarget.Deactivate();
+				break;
+			default:
+				break;
 		}
+
 	}
 	public void ToggleActivated() {
-		if (currentRoutine == null) {
-			switch (mode) {
-				case Mode.FixedTimePressed:
+
+		switch (mode) {
+			case Mode.FixedTimePressed:
+				if (currentRoutine == null) {
 					currentRoutine = FixedTimeCoroutine();
 					StartCoroutine(currentRoutine);
-					break;
-				case Mode.MinTimePressed:
+				}
+				break;
+			case Mode.MinTimePressed:
+				if (currentRoutine == null) {
 					currentRoutine = MinTimeCoroutine();
 					StartCoroutine(currentRoutine);
-					break;
-				case Mode.MaxTimePressed:
-					break;
-				default:
-					break;
-			}
+				} else keepActive = !keepActive;
+				break;
+			case Mode.MaxTimePressed:
+				if (currentRoutine == null) {
+					currentRoutine = MaxTimeCoroutine();
+					StartCoroutine(currentRoutine);
+				} else {
+					StopCoroutine(currentRoutine);
+					currentRoutine = null;
+					activationTarget.ToggleActivated();
+				}
+				break;
+			default:
+				break;
 		}
+
 	}
 	public void setActivated(bool newValue) {
 		if (newValue) Activate();
@@ -95,15 +118,24 @@ public class TimeRestrictor : MonoBehaviour, IsActivated {
 	}
 
 	private IEnumerator MinTimeCoroutine() {
+		keepActive = true;
 		activationTarget.ToggleActivated();
 		if (debugTime) Debug.Log("Toggling for " + elapsedTimeInSeconds + " seconds");
 		yield return new WaitForSeconds(elapsedTimeInSeconds);
-		if (debugTime) Debug.Log("Toggling back");
+		if (!keepActive) {
+			activationTarget.ToggleActivated();
+			if (debugTime) Debug.Log("Toggling back");
+		}
 		currentRoutine = null;
 	}
 
 	private IEnumerator MaxTimeCoroutine() {
-		yield return null;
+		activationTarget.ToggleActivated();
+		if (debugTime) Debug.Log("Toggling for " + elapsedTimeInSeconds + " seconds");
+		yield return new WaitForSeconds(elapsedTimeInSeconds);
+		activationTarget.ToggleActivated();
+		if (debugTime) Debug.Log("Toggling back");
+		currentRoutine = null;
 	}
 
 
